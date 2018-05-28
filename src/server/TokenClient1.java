@@ -1,4 +1,4 @@
-package tokenring;
+package server;
 
 
 import java.io.*; 
