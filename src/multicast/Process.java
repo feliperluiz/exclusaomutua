@@ -77,9 +77,9 @@ public class Process implements Runnable {
 		Object message = "anyThing";
 		
 		// Gets a random process Id to send event, excluding its own Id.
-		int randomProcessId = random.nextInt(dcSystem.numberOfProcesses);
+		int randomProcessId = random.nextInt(dcSystem.nprocessos);
 		while(randomProcessId == processId){
-			randomProcessId = random.nextInt(dcSystem.numberOfProcesses);
+			randomProcessId = random.nextInt(dcSystem.nprocessos);
 		}
 		
 		// Increment local clock time by 1, no piggyback time so pass -1
@@ -88,7 +88,7 @@ public class Process implements Runnable {
 		Packet packet = new Packet(message, randomProcessId, time);
 		
 		// Sending packet for delivery.
-		dcSystem.deliverSendMessage(packet, processId);
+		dcSystem.despachaPacote(packet, processId);
 	}
 
 	/**
