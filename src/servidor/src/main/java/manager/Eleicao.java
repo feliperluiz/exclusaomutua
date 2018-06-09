@@ -1,9 +1,9 @@
-package manager;
+package servidor.src.main.java.manager;
 
 import java.io.Serializable;
 
-import model.ListaProcessos;
-import model.Processo;
+import servidor.src.main.java.model.ListaProcessos;
+import servidor.src.main.java.model.Processo;
 
 public class Eleicao implements Serializable {
 

@@ -1,6 +1,7 @@
-package main;
+package servidor.src.main.java.main;
 
-import manager.Gerenciador;
+
+import servidor.src.main.java.manager.Gerenciador;
 
 public class MainApp {
 

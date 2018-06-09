@@ -1,8 +1,8 @@
-package uteis;
+package servidor.src.main.java.uteis;
 
 import java.util.Comparator;
 
-import model.Processo;
+import servidor.src.main.java.model.Processo;
 
 public class Comparacao implements Comparator<Processo>{
 

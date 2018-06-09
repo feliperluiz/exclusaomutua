@@ -1,13 +1,13 @@
-package manager;
+package servidor.src.main.java.manager;
 
 import java.io.Serializable;
 import java.util.Timer;
 import java.util.TimerTask;
-import model.Consumidor;
-import model.ListaProcessos;
-import model.Processo;
-import model.Produtor;
-import uteis.Randomize;
+import servidor.src.main.java.model.Consumidor;
+import servidor.src.main.java.model.ListaProcessos;
+import servidor.src.main.java.model.Processo;
+import servidor.src.main.java.model.Produtor;
+import servidor.src.main.java.uteis.Randomize;
 
 public class Gerenciador implements Serializable {
 

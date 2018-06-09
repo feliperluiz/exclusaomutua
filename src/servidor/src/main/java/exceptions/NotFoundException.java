@@ -1,4 +1,4 @@
-package exceptions;
+package servidor.src.main.java.exceptions;
 
 public class NotFoundException extends Exception {
 	

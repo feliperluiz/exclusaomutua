@@ -19,7 +19,7 @@ public class DCSystem {
 	
 	//Entrega as mensagens do evento conforme os detalhes do pacote
 	public synchronized void despachaPacote(Packet packet, int senderProcessId) {
-		Process process = processos.get(packet.getProcessId());
+		Process process = processos.get(packet.getProcessoId());
 		process.receiveEvent(packet, senderProcessId);
 	}
 	

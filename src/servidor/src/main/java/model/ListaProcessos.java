@@ -1,4 +1,4 @@
-package model;
+package servidor.src.main.java.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -6,8 +6,8 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
-import exceptions.NotFoundException;
-import uteis.Comparacao;
+import servidor.src.main.java.exceptions.NotFoundException;
+import servidor.src.main.java.uteis.Comparacao;
 
 public class ListaProcessos implements Serializable {
 
