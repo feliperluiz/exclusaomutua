@@ -1,60 +1,33 @@
 package multicast;
 
 public class Packet {
-	
-	/**
-	 * Message to be delivered.
-	 */
-	private final Object message;
-	
-	/**
-	 * Id of the receiving process.
-	 */
-	private final int processId;
-	
-	/**
-	 * Piggyback time from sender process.
-	 */
+	private final Object messagem;
+	//processo receptor
+	private final int processoId;
+	//Tempo de retorno do processo remetente.
 	private final int time;
 
-	/**
-	 * Constructs an immutable packet with initialized values.
-	 * @param message
-	 * @param processId
-	 * @param time
-	 */
-	public Packet(Object message, int processId, int time) {
-		this.message = message;
-		this.processId = processId;
+	public Packet(Object messagem, int processId, int time) {
+		this.messagem = messagem;
+		this.processoId = processId;
 		this.time = time;
 	}
 
-	/**
-	 * Get the message.
-	 * @return
-	 */
-	public Object getMessage() {
-		return message;
+	public Object getmessagem() {
+		return messagem;
 	}
 
-	/**
-	 * Id of receiver process. 
-	 * @return
-	 */
-	public int getProcessId() {
-		return processId;
+	//processo receptor
+	public int getProcessoId() {
+		return processoId;
 	}
 
-	/**
-	 * Piggyback time from sender process.
-	 * @return
-	 */
+	//Tempo de retorno do processo remetente.
 	public int getTime() {
 		return time;
 	}
 
-	@Override
 	public String toString() {
-		return String.format("Packet [message=%s, receiving processId=%s, piggyback time=%s]", message, processId, time);
+		return String.format("Packet [messagem=%s, recebendo processoId=%s, tempo de retorno time=%s]", messagem, processoId, time);
 	}
 }
