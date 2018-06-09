@@ -1,119 +1,89 @@
 package multicast;
 
+/*
+ * Classe que representa um processo independente dentro do multicast.
+ * Realiza eventos (local, enviar, receber) aleatoriamente até ser interrompido.
+ */
 public class Process implements Runnable {
-	
-	/**
-	 * Local clock time.
-	 */
-	private int clockTime;
-	
-	/**
-	 * Process Id, starts with 0 to n-1, where n is the number of processes.
-	 */
-	private final int processId;
-	
-	/**
-	 * Reference to randomly send messages within distributed computing environment. 
-	 */
+
+	private int tempoLocal;
+	private final int processoId;
 	private final DCSystem dcSystem;
-	
-	/**
-	 * Randomizer.
-	 */
 	private final java.util.Random random;
 
-	/**
-	 * Create a new process.
-	 * 
-	 * @param dcSystem
-	 * @param processId
-	 */
-	public Process(DCSystem dcSystem, int processId) {
-		clockTime = 0; // initialize clock time with 0 
-		this.processId = processId;
+	public Process(DCSystem dcSystem, int processoId) {
+		tempoLocal = 0; 
+		this.processoId = processoId;
 		this.dcSystem = dcSystem;
 		random = new java.util.Random();
 	}
 	
-	@Override
 	public void run() {
-		System.out.println("Process [P" + processId + "] starts ...");
+		System.out.println("Processo [P" + processoId + "] iniciado ...");
 		while (true) {
-			// Perform a random event (local or send).
-			int randomEvent = random.nextInt(2);
-			switch (randomEvent) {
+			// Realize um evento aleatório (local ou externo).
+			int eventoRamdomico = random.nextInt(2);
+			switch (eventoRamdomico) {
 				case 0: {
-					// Perform a local event.
+					// realiza um evento local
 					localEvent();
 					break;
 				}
 				case 1: {
-					// Perform a send event.
+					// realiza o evento de enviar
 					sendEvent();
 					break;
 				}
 			}
 			try {
-				// Add some random delay between events
+				// Adiciona atraso aleatório entre eventos para facilitar a visualização
 				long randomDelay = System.currentTimeMillis() % (random.nextInt(1000) + 1000);
 				Thread.sleep(randomDelay);
 			} catch (InterruptedException e) { e.printStackTrace(); }
 		}
 	}
 
-	/**
-	 * Performs a local event.
-	 */
 	public void localEvent() {
-		// Increment local clock time by 1, no piggyback time so pass -1
+		// Incrementa a hora do relógio local em 1, sem tempo de retorno, por isso -1
 		int time = increamentClockTime(-1);
-		System.out.println("Process [P" + processId + "] performs a local event and clock time is: " + time);
+		System.out.println("Processo [P" + processoId + "] realiza um evento local. Hora do relógio é: " + time);
 	}
 
-	/**
-	 * Performs a send event to any other random process.
-	 */
 	public void sendEvent() {
-		Object message = "anyThing";
+		Object message = "exclusao mutua - multicast";
 		
-		// Gets a random process Id to send event, excluding its own Id.
-		int randomProcessId = random.nextInt(dcSystem.nprocessos);
-		while(randomProcessId == processId){
-			randomProcessId = random.nextInt(dcSystem.nprocessos);
+		// Obtém um ID de processo aleatório para enviar o evento, excluindo seu próprio ID.
+		int randomProcessoId = random.nextInt(dcSystem.nprocessos);
+		while(randomProcessoId == processoId){
+			randomProcessoId = random.nextInt(dcSystem.nprocessos);
 		}
 		
-		// Increment local clock time by 1, no piggyback time so pass -1
+		// Incrementa a hora do relógio local em 1
 		int time = increamentClockTime(-1);
-		System.out.println("Process [P" + processId + "] sends an event to process [P"+ randomProcessId +"] with piggyback time as: " + time);
-		Packet packet = new Packet(message, randomProcessId, time);
+		System.out.println("Processo [P" + processoId + "] envia um evento para o processo [P"+ randomProcessoId +"] com adição de tempo de: " + time);
+		Packet packet = new Packet(message, randomProcessoId, time);
 		
-		// Sending packet for delivery.
-		dcSystem.despachaPacote(packet, processId);
+		// Envia pacotes para entregar
+		dcSystem.despachaPacote(packet, processoId);
 	}
 
-	/**
-	 * This message gets executed when the process receives any event from other processes within distributed computing environment.
-	 * @param packet
-	 * @param senderProcessId
-	 */
-	public void receiveEvent(Packet packet, int senderProcessId) {
-		// Increment local clock time by 1, with respect to piggyback time coming from sender process
+	//o metodo é executado quando o processo recebe qualquer evento de outros processos no ambiente multicast.
+	public void receiveEvent(Packet packet, int senderprocessoId) {
+		// Incrementar a hora do relógio local em 1, com relação ao tempo de retorno do processo remetente
 		int time = increamentClockTime(packet.getTime());
-		System.out.println("Process [P" + processId + "] receives an event from process [P"+ senderProcessId +"] and clock time is: " + time);
+		System.out.println("Processo [P" + processoId + "] recebe um evento do processo\n" + 
+				" [P"+ senderprocessoId +"] e a hora do relógio é: " + time);
 	}
 	
 	/**
-	 * Increments the local clock time, applying rules as mentioned below:
-	 * 		1. Sets the local clock time to max of local time and piggyback time.
-	 * 		2. Increments the calculated local clock by 1 and return.
-	 * 
-	 *  NOTE: This is a synchronized method to thread-safely increase the time. 
-	 * @param piggybackTime
-	 * @return
+	 * Incrementa o horário do relógio local, aplicando regras conforme mencionado abaixo:
+	 * 		1. Define a hora do relógio local para o máximo de hora local e hora de partida.
+	 * 		2. Incrementa o relógio local calculado em 1 e retorna.
+	 *  OBS: Este é um método sincronizado para aumentar com segurança o tempo.
 	 */
-	public synchronized int increamentClockTime(int piggybackTime){
-		clockTime = clockTime > piggybackTime ? clockTime : piggybackTime;
-		return ++clockTime;
+	public synchronized int increamentClockTime(int tempoRetorno){
+		tempoLocal = tempoLocal > tempoRetorno ? tempoLocal : tempoRetorno;
+		return ++tempoLocal;
 	}
 
 }
