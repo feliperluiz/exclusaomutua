@@ -2,7 +2,7 @@ package multicast;
 
 public class Packet {
 	private final Object messagem;
-	//processo receptor
+	//Processo receptor
 	private final int processoId;
 	//Tempo de retorno do processo remetente.
 	private final int time;
@@ -13,11 +13,11 @@ public class Packet {
 		this.time = time;
 	}
 
-	public Object getmessagem() {
+	public Object getMensagem() {
 		return messagem;
 	}
 
-	//processo receptor
+	//Processo receptor
 	public int getProcessoId() {
 		return processoId;
 	}
@@ -28,6 +28,6 @@ public class Packet {
 	}
 
 	public String toString() {
-		return String.format("Packet [messagem=%s, recebendo processoId=%s, tempo de retorno time=%s]", messagem, processoId, time);
+		return String.format("Pacote [messagem=%s, recebendo processoId=%s, tempo de retorno time=%s]", messagem, processoId, time);
 	}
 }

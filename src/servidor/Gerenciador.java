@@ -1,13 +1,8 @@
-package servidor.src.main.java.manager;
+package servidor;
 
 import java.io.Serializable;
 import java.util.Timer;
 import java.util.TimerTask;
-import servidor.src.main.java.model.Consumidor;
-import servidor.src.main.java.model.ListaProcessos;
-import servidor.src.main.java.model.Processo;
-import servidor.src.main.java.model.Produtor;
-import servidor.src.main.java.uteis.Randomize;
 
 public class Gerenciador implements Serializable {
 
@@ -43,18 +38,20 @@ public class Gerenciador implements Serializable {
 	}
 
 	public void inicializar() {                
-		TimerTask timerTaskConsultarCoordenador = new ConsultarCoordenador();
-		timerConsultarCoordenador.scheduleAtFixedRate(
-				timerTaskConsultarCoordenador, 0, 2000);
+		TimerTask timerTaskConsultarCoordenador = new ConsultarCoordenador();		
+		timerConsultarCoordenador.scheduleAtFixedRate(timerTaskConsultarCoordenador, 0, 2000);
+		//fixed rate � relativo ao tempo da primeira tarefa, ou seja, vai executar 2 segundos 
+		//independente das tarefas subsequentes
+		
 		TimerTask timerTaskNovoProcesso = new NovoProcesso();
-		timerConsultarNovoProcesso.scheduleAtFixedRate(timerTaskNovoProcesso,
-				0, 3000);
-		TimerTask timerTaskEliminarProcesso = new EliminarProcesso();
-		timerEliminarProcesso.scheduleAtFixedRate(timerTaskEliminarProcesso, 0,
-				5000);
+		timerConsultarNovoProcesso.scheduleAtFixedRate(timerTaskNovoProcesso, 0, 3000);
+		
+		TimerTask timerTaskEliminarProcesso = new EliminarProcesso();		
+		timerEliminarProcesso.scheduleAtFixedRate(timerTaskEliminarProcesso, 0, 5000);
+		
 		TimerTask timerTaskDesativarCoordenador = new DesativarCoordenador();
-		timerDesativarCoordenador.schedule(timerTaskDesativarCoordenador,
-				10000, 10000);
+		timerDesativarCoordenador.schedule(timerTaskDesativarCoordenador, 10000, 10000);
+		//em 10 segundos inicia a tarefa para desativar coordenador
 	}
 
 	public void encerrar() {
@@ -65,10 +62,10 @@ public class Gerenciador implements Serializable {
 			timerConsultarNovoProcesso.cancel();
 			timerEliminarProcesso.cancel();
                         
-                        for (int i = 0; i < listaProcessos.size(); i++)
-                        {
-                            listaProcessos.get(i).getT().stop();
-                        }
+            for (int i = 0; i < listaProcessos.size(); i++)
+            {
+                listaProcessos.get(i).getT().stop();
+            }
 		} catch (Exception exception) {
 			exception.printStackTrace();
 		}
@@ -78,14 +75,14 @@ public class Gerenciador implements Serializable {
 
 		@Override
 		public void run() {
-			int position = Randomize.random(listaProcessos.size());
+			int position = Randomize.random(listaProcessos.size()); //pega um processo randomicamente
 			Processo processo = listaProcessos.get(position);
 			Processo coordenador = eleicao.getCoordenador();
 			if (processo != null)
-				if (!processo.equals(coordenador))
+				if (!processo.equals(coordenador)) //se o processo n�o � o coordenador, este informa quem � o coordenador
 					eleicao.notificar();
 			System.out.println(listaProcessos.toString());
-			if(coordenador == null)
+			if(coordenador == null) //caso n�o se tenha um coordenador, elege o �ltimo da lista de processos
 				eleicao.eleger(listaProcessos);
 		}
 	}
@@ -95,27 +92,28 @@ public class Gerenciador implements Serializable {
 		@Override
 		public void run() {
 			Processo processo = new Processo();
-			processo.setPidId(Processo.getIID());
+			processo.setPidId(Processo.getIID()); 
+			//vai criando processos com ID par ou �mpar para diferenciar produtores / consumidores
                         
-                        /**
-                         * Start Produto / Consumidor
-                         */
-                        Thread t;
-                        if ((processo.getIID() % 2) == 0)
-                        {
-                            t = new Produtor(processo.getIID(), bufferCompartilhado, 2);
-                        }
-                        else
-                        {
-                            t = new Consumidor(processo.getIID(), bufferCompartilhado, 2);
-                        }
+            /**
+             * Inicia Produto / Consumidor
+             */
+            Thread t;
+            if ((processo.getIID() % 2) == 0)
+            {
+                t = new Produtor(processo.getIID(), bufferCompartilhado, 2);
+            }
+            else
+            {
+                t = new Consumidor(processo.getIID(), bufferCompartilhado, 2);
+            }
+            
+            processo.setT(t); //seta a Thread criada no processo e adiciona o processo na lista
+            listaProcessos.add(processo);
+            
+            processo.getT().start(); //inicia a Thread criada
                         
-                        processo.setT(t);
-                        listaProcessos.add(processo);
-                        
-                        processo.getT().start();
-                        
-			System.out.println("Criando Novo Processo:"+processo);
+			System.out.println("Criando Novo Processo: "+processo);
 		}
 	}
 
@@ -123,7 +121,7 @@ public class Gerenciador implements Serializable {
 
 		@Override
 		public void run() {
-			int position = Randomize.random(listaProcessos.size());
+			int position = Randomize.random(listaProcessos.size()); //elimina um processo da lista de forma rand�mica
 			Processo coordenador = eleicao.getCoordenador();
 			Processo eliminado = listaProcessos.get(position);
 			if ((eliminado != null) && (coordenador != null))

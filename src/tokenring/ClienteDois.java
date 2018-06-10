@@ -6,8 +6,9 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.Socket;
 
-public class ClientTwo {
-	public static void main(String args[])throws IOException {
+public class ClienteDois {
+	
+	public static void instanciaClienteDois() throws IOException {
         
 		Socket s = new Socket("localhost",7000);
         PrintStream out = new PrintStream(s.getOutputStream());
@@ -23,7 +24,7 @@ public class ClientTwo {
             str = in2.readLine();
             
             if(str.equalsIgnoreCase("Token")) {
-                System.out.println("Você quer enviar algum dado?");
+                System.out.println("Vocï¿½ quer enviar algum dado?");
                 System.out.println("Digite Sim ou Nao");
                 str = br.readLine();
                 

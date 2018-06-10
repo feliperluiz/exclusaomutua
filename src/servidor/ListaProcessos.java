@@ -1,13 +1,10 @@
-package servidor.src.main.java.model;
+package servidor;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
-
-import servidor.src.main.java.exceptions.NotFoundException;
-import servidor.src.main.java.uteis.Comparacao;
 
 public class ListaProcessos implements Serializable {
 
@@ -50,20 +47,21 @@ public class ListaProcessos implements Serializable {
 				primeiro = processo;
 				ultimo = processo;
 			} else {
+				//como � o �ltimo o pr�ximo vai ser ele mesmo
 				ultimo.setProximo(processo);
 				ultimo = processo;
 			}
 		}
 	}
 
-	public Processo findById(Integer pidID) throws NotFoundException {
+	public Processo findById(Integer pidID) throws Exception {
 		Processo aux = primeiro;
 		while (aux != null) {
 			if (aux.getPidId() == pidID)
 				return aux;
 			aux = aux.getProximo();
 		}
-		throw new NotFoundException("Registro n�o encontrado.");
+		throw new Exception("Registro n�o encontrado.");
 	}
 
 	public synchronized List<Processo> findAll() {
@@ -140,7 +138,7 @@ public class ListaProcessos implements Serializable {
 	public void eleicao() {
 		Processo aux = primeiro;
 		List<Integer> pidIDs = new ArrayList<Integer>();
-		while (aux != null) {
+		while (aux != null) { //varre at� chegar no �ltimo processo da fila para ser o coordenador!
 			pidIDs.add(aux.getPidId());
 			System.out.println("PidID:" + pidIDs.toString());
 			aux.mensagem();

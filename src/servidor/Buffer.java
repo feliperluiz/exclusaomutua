@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package servidor.src.main.java.manager;
+package servidor;
 
 public class Buffer
 {
@@ -28,15 +28,13 @@ public class Buffer
     public synchronized int get(int idConsumidor) {
         while (disponivel == false) {
             try {
-                System.out.println("-----Consumidor #" + idConsumidor
-                        + " esperado...");
+                System.out.println("-----Consumidor #" + idConsumidor + " esperado...");
                 wait();
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        System.out.println("-----Consumidor #" + idConsumidor + " consumiu: "
-                + conteudo);
+        System.out.println("-----Consumidor #" + idConsumidor + " consumiu: " + conteudo);
         disponivel = false;
         notifyAll();
         return conteudo;

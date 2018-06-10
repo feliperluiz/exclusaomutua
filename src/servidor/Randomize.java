@@ -1,4 +1,4 @@
-package servidor.src.main.java.uteis;
+package servidor;
 
 import java.util.Random;
 

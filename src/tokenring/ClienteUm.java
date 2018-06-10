@@ -7,7 +7,7 @@ import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class ClientOne {
+public class ClienteUm {
 	
 	public static void main(String args[]) throws IOException {
         
@@ -25,7 +25,7 @@ public class ClientOne {
         while(true) {
      
             if(str.equalsIgnoreCase("Token")) {
-                System.out.println("Você quer enviar algum dado?");
+                System.out.println("VocÃª quer enviar algum dado?");
                 System.out.println("Digite Sim ou Nao");
                 str = br.readLine();
                 

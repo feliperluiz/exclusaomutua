@@ -1,4 +1,4 @@
-package servidor.src.main.java.model;
+package servidor;
 
 import java.io.Serializable;
 
@@ -62,23 +62,21 @@ public class Processo implements Serializable {
 	}
 
 
+	//vai enviando mensagem de um processo ao pr�ximo processo da fila
 	public void mensagem() {
 		if(proximo != null) 
-		System.err
-				.println("[" + this + "] enviando para :[" +proximo+ "]");
+		System.err.println("[" + this + "] enviando para :[" +proximo+ "]");
 		else
-			System.err
-			.println("[" + this + "] enviando para :[...]");
+		System.err.println("[" + this + "] enviando para :[...]");
 	
 	}
 	
+	//vai enviando mensagem de um processo ao pr�ximo processo da fila sobre a elei��o do coordenador
 	public void mensagem(Processo processo) {
 		if(proximo != null) 
-		System.err
-				.println("[" + this + "] enviando para :[" +proximo+ "], coordenador eleito: ["+processo+"]");
+		System.err.println("[" + this + "] enviando para :[" +proximo+ "], coordenador eleito: ["+processo+"]");
 		else
-			System.err
-			.println("[" + this + "] enviando para :[...]");
+		System.err.println("[" + this + "] enviando para :[...]");
 	
 	}
 	@Override

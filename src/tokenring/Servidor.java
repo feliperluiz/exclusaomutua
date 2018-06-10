@@ -3,12 +3,12 @@ package tokenring;
 import java.io.*;
 import java.net.*;
 
-public class Server implements Runnable {
+public class Servidor implements Runnable {
     
 	Socket socket = null;
     static ServerSocket ss;
     
-    public Server(Socket newSocket) {
+    public Servidor(Socket newSocket) {
         this.socket = newSocket;        
     }
     
@@ -17,13 +17,17 @@ public class Server implements Runnable {
     	ss = new ServerSocket(7000);
         
     	System.out.println("Servidor Iniciado");
-        
+    	
     	while(true) {
             Socket s = ss.accept();
-            Server es = new Server(s);
-            Thread t = new Thread(es);
+            Servidor es = new Servidor(s); //instancia o Servidor passando o respectivo socket
+            Thread t = new Thread(es); //instancia a Thread passando o servidor
             t.start();
+            
         }
+    	
+    	
+
     }
     
     public void run() {

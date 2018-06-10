@@ -8,13 +8,13 @@ public class Process implements Runnable {
 
 	private int tempoLocal;
 	private final int processoId;
-	private final DCSystem dcSystem;
+	private final Multicast multicast;
 	private final java.util.Random random;
 
-	public Process(DCSystem dcSystem, int processoId) {
+	public Process(Multicast multicast, int processoId) {
 		tempoLocal = 0; 
 		this.processoId = processoId;
-		this.dcSystem = dcSystem;
+		this.multicast = multicast;
 		random = new java.util.Random();
 	}
 	
@@ -53,9 +53,9 @@ public class Process implements Runnable {
 		Object message = "exclusao mutua - multicast";
 		
 		// Obtém um ID de processo aleatório para enviar o evento, excluindo seu próprio ID.
-		int randomProcessoId = random.nextInt(dcSystem.nprocessos);
+		int randomProcessoId = random.nextInt(multicast.nprocessos);
 		while(randomProcessoId == processoId){
-			randomProcessoId = random.nextInt(dcSystem.nprocessos);
+			randomProcessoId = random.nextInt(multicast.nprocessos);
 		}
 		
 		// Incrementa a hora do relógio local em 1
@@ -64,7 +64,7 @@ public class Process implements Runnable {
 		Packet packet = new Packet(message, randomProcessoId, time);
 		
 		// Envia pacotes para entregar
-		dcSystem.despachaPacote(packet, processoId);
+		multicast.despachaPacote(packet, processoId);
 	}
 
 	//o metodo é executado quando o processo recebe qualquer evento de outros processos no ambiente multicast.

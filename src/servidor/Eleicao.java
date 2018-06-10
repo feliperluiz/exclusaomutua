@@ -1,9 +1,6 @@
-package servidor.src.main.java.manager;
+package servidor;
 
 import java.io.Serializable;
-
-import servidor.src.main.java.model.ListaProcessos;
-import servidor.src.main.java.model.Processo;
 
 public class Eleicao implements Serializable {
 
@@ -29,12 +26,11 @@ public class Eleicao implements Serializable {
 	}
 
 	public void notificar() {
-		synchronized (this) {
+		synchronized (this) { //mais que uma Thread n�o vai conseguir acessar esse trecho ao mesmo tempo
 			if (coordenador == null)
 				System.err.println("Coordenador n�o est� respondendo....");
 			else
-				System.out.println("Coordenador Atual:"
-						+ coordenador.toString() + " consultado...");
+				System.out.println("Coordenador Atual:" + coordenador.toString() + " consultado...");
 		}
 	}
 
