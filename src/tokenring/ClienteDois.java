@@ -8,7 +8,7 @@ import java.net.Socket;
 
 public class ClienteDois {
 	
-	public static void instanciaClienteDois() throws IOException {
+	public static void main(String args[]) throws IOException {
         
 		Socket s = new Socket("localhost",7000);
         PrintStream out = new PrintStream(s.getOutputStream());
